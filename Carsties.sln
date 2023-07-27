@@ -7,7 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2A8914BF-136
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionService", "src\AuctionService\AuctionService.csproj", "{F65B3E59-4281-4266-8F50-85A71779A24D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchService", "src\SearchService\SearchService.csproj", "{7D9279D1-4523-4B4D-AB54-8C1D70D2AB98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SearchService", "src\SearchService\SearchService.csproj", "{7D9279D1-4523-4B4D-AB54-8C1D70D2AB98}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F65B3E59-4281-4266-8F50-85A71779A24D} = {F65B3E59-4281-4266-8F50-85A71779A24D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
