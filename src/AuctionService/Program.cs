@@ -1,33 +1,55 @@
+using AuctionService.Consumers;
 using AuctionService.Data;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-  builder.Services.AddControllers();
+    builder.Services.AddControllers();
 
-  builder.Services.AddDbContext<AuctionDbContext>(options =>
-  {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-  });
+    builder.Services.AddDbContext<AuctionDbContext>(opts =>
+    {
+        opts.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    });
 
-  builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+    builder.Services.AddMassTransit(x =>
+    {
+        x.AddConsumersFromNamespaceContaining<AuctionCreatedFaultConsumer>();
+
+        x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("auction", false));
+
+        x.AddEntityFrameworkOutbox<AuctionDbContext>(o =>
+        {
+            o.QueryDelay = TimeSpan.FromSeconds(10);
+
+            o.UsePostgres();
+            o.UseBusOutbox();
+        });
+
+        x.UsingRabbitMq((context, cfg) =>
+        {
+            cfg.ConfigureEndpoints(context);
+        });
+    });
 }
 
 var app = builder.Build();
 {
-  app.UseAuthorization();
+    app.UseAuthorization();
 
-  app.MapControllers();
+    app.MapControllers();
 
 
-  try
-  {
-    DbInitializer.InitDb(app);
-  }
-  catch (Exception e)
-  {
-    Console.WriteLine(e);
-  }
+    try
+    {
+        DbInitializer.InitDb(app);
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+    }
 
-  app.Run();
+    app.Run();
 }
