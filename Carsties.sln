@@ -8,22 +8,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionService", "src\AuctionService\AuctionService.csproj", "{F65B3E59-4281-4266-8F50-85A71779A24D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SearchService", "src\SearchService\SearchService.csproj", "{7D9279D1-4523-4B4D-AB54-8C1D70D2AB98}"
-	ProjectSection(ProjectDependencies) = postProject
-		{F65B3E59-4281-4266-8F50-85A71779A24D} = {F65B3E59-4281-4266-8F50-85A71779A24D}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "src\Contracts\Contracts.csproj", "{5302658F-DC45-4EC5-9EA9-D5CA0802C9E5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService", "src\IdentityService\IdentityService.csproj", "{30D4A6EF-BF91-4775-8BE1-64AC3886F763}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7D9279D1-4523-4B4D-AB54-8C1D70D2AB98} = {7D9279D1-4523-4B4D-AB54-8C1D70D2AB98}
-		{F65B3E59-4281-4266-8F50-85A71779A24D} = {F65B3E59-4281-4266-8F50-85A71779A24D}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GatewayService", "src\GatewayService\GatewayService.csproj", "{C4ECEDBD-7A43-45F2-955B-1D0D1AAC3342}"
-	ProjectSection(ProjectDependencies) = postProject
-		{30D4A6EF-BF91-4775-8BE1-64AC3886F763} = {30D4A6EF-BF91-4775-8BE1-64AC3886F763}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
