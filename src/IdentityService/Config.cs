@@ -20,6 +20,7 @@ namespace IdentityService
 		public static IEnumerable<Client> Clients =>
 			new Client[]
 			{
+				// THIS IS ONLY FOR POSTMAN TESTING, RESOURCEOWNERPASSWORD Will be deprecated.
 				new Client
 				{
 					ClientId = "postman",
@@ -28,7 +29,19 @@ namespace IdentityService
 					RedirectUris = { "https://www.getpostman.com/oauth2/callback" },
 					ClientSecrets = {new Secret("NotASecret".Sha256()) },
 					AllowedGrantTypes = { GrantType.ResourceOwnerPassword }
-				}
+				},
+				new Client
+				{
+					ClientId = "auctionsNextApp",
+					ClientName = "AuctionsNextApp",
+					ClientSecrets = {new Secret("secret".Sha256()) },
+					AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+					RequirePkce = false,
+					RedirectUris = { "http://localhost:3000/api/auth/callback/id-server" },
+					AllowOfflineAccess = true,
+					AllowedScopes = { "openid", "profile", "auctionApp" },
+					AccessTokenLifetime = 3600 * 24 * 30 // 1hr * 24Hrs * 30Days
+				},
 			};
 	}
 }
