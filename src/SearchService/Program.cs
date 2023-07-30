@@ -8,62 +8,64 @@ using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddControllers();
-    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+	builder.Services.AddControllers();
+	builder.Services.AddCors();
+	builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-    builder.Services
-        .AddHttpClient<AuctionServiceClient>()
-        .AddPolicyHandler(GetPolicy());
+	builder.Services
+		.AddHttpClient<AuctionServiceClient>()
+		.AddPolicyHandler(GetPolicy());
 
-    builder.Services.AddMassTransit(x =>
-    {
-        x.AddConsumersFromNamespaceContaining<AuctionCreatedConsumer>();
+	builder.Services.AddMassTransit(x =>
+	{
+		x.AddConsumersFromNamespaceContaining<AuctionCreatedConsumer>();
 
-        x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("search", false));
+		x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("search", false));
 
-        x.UsingRabbitMq((context, cfg) =>
-        {
-            cfg.Host(builder.Configuration["RabbitMq:Host"], "/", host =>
-            {
-                host.Username(builder.Configuration.GetValue("RabbitMq:Username", "guest"));
-                host.Password(builder.Configuration.GetValue("RabbitMq:Password", "guest"));
-            });
+		x.UsingRabbitMq((context, cfg) =>
+		{
+			cfg.Host(builder.Configuration["RabbitMq:Host"], "/", host =>
+			{
+				host.Username(builder.Configuration.GetValue("RabbitMq:Username", "guest"));
+				host.Password(builder.Configuration.GetValue("RabbitMq:Password", "guest"));
+			});
 
-            cfg.ReceiveEndpoint("search-auction-created", e =>
-            {
-                e.UseMessageRetry(r => r.Interval(5, 10));
-                e.ConfigureConsumer<AuctionCreatedConsumer>(context);
-            });
+			cfg.ReceiveEndpoint("search-auction-created", e =>
+			{
+				e.UseMessageRetry(r => r.Interval(5, 10));
+				e.ConfigureConsumer<AuctionCreatedConsumer>(context);
+			});
 
-            cfg.ConfigureEndpoints(context);
-        });
-    });
+			cfg.ConfigureEndpoints(context);
+		});
+	});
 }
 
 
 var app = builder.Build();
 {
-    app.UseAuthorization();
+	app.UseCors(pol => pol.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+	app.UseAuthorization();
 
-    app.MapControllers();
+	app.MapControllers();
 
-    app.Lifetime.ApplicationStarted.Register(async () =>
-    {
-        try
-        {
-            await DbInitializer.InitDb(app);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-        }
-    });
+	app.Lifetime.ApplicationStarted.Register(async () =>
+	{
+		try
+		{
+			await DbInitializer.InitDb(app);
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex);
+		}
+	});
 
-    app.Run();
+	app.Run();
 }
 
 static IAsyncPolicy<HttpResponseMessage> GetPolicy() => HttpPolicyExtensions
-    .HandleTransientHttpError()
-    //.OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
-    .WaitAndRetryForeverAsync(_ => TimeSpan.FromSeconds(3));
+	.HandleTransientHttpError()
+	//.OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
+	.WaitAndRetryForeverAsync(_ => TimeSpan.FromSeconds(3));
 

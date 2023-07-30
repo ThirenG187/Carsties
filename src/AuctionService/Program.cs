@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 	IdentityModelEventSource.ShowPII = true;
 	ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 	builder.Services.AddControllers();
+	builder.Services.AddCors();
 
 	builder.Services.AddDbContext<AuctionDbContext>(opts =>
 	{
@@ -56,6 +57,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 {
+	app.UseCors(pol =>
+	{
+		pol.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+	});
+
 	app.UseAuthentication();
 	app.UseAuthorization();
 

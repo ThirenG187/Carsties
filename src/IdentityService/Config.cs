@@ -40,7 +40,8 @@ namespace IdentityService
 					RedirectUris = { "http://localhost:3000/api/auth/callback/id-server" },
 					AllowOfflineAccess = true,
 					AllowedScopes = { "openid", "profile", "auctionApp" },
-					AccessTokenLifetime = 3600 * 24 * 30 // 1hr * 24Hrs * 30Days
+					AccessTokenLifetime = 3600 * 24 * 30, // 1hr * 24Hrs * 30Days,
+					AlwaysIncludeUserClaimsInIdToken = true
 				},
 			};
 	}

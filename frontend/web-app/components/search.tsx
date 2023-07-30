@@ -2,7 +2,7 @@
 
 import useAuctionParams from '@/hooks/useAuctionParams'
 import { SearchIcon } from 'lucide-react'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent } from 'react'
 
 interface SearchProps {}
 

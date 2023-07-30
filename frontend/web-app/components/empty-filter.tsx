@@ -1,17 +1,24 @@
+'use client'
+
 import useAuctionParams from '@/hooks/useAuctionParams'
-import Heading from './Heading'
+import Heading from '@/components/heading'
 import { Button } from 'flowbite-react'
+import { signIn } from 'next-auth/react'
 
 interface EmptyFilterProps {
   title?: string
   subtitle?: string
   showReset?: boolean
+  showLogin?: boolean
+  callbackUrl?: string
 }
 
 const EmptyFilter: React.FC<EmptyFilterProps> = ({
   title = 'No Matches for this filter',
   subtitle = 'Try changing or resetting the filter',
   showReset,
+  showLogin,
+  callbackUrl,
 }) => {
   const { reset } = useAuctionParams()
 
@@ -22,6 +29,11 @@ const EmptyFilter: React.FC<EmptyFilterProps> = ({
         {showReset && (
           <Button outline onClick={reset}>
             Remove Filters
+          </Button>
+        )}
+        {showLogin && (
+          <Button outline onClick={() => signIn('id-server', { callbackUrl })}>
+            Login
           </Button>
         )}
       </div>
