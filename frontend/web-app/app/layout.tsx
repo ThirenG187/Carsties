@@ -1,6 +1,7 @@
 import Navbar from '@/components/navbar'
 import '@/app/globals.css'
 import type { Metadata } from 'next'
+import ToasterProvider from '@/providers/toaster-provider'
 
 export const metadata: Metadata = {
   title: 'Carsties',
@@ -15,6 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <ToasterProvider />
         <Navbar />
         <main className="container px-2 pt-10 pb-4 mx-auto">{children}</main>
       </body>

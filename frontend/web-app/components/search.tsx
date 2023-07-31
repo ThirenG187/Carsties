@@ -2,11 +2,14 @@
 
 import useAuctionParams from '@/hooks/useAuctionParams'
 import { SearchIcon } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
 import { ChangeEvent } from 'react'
 
 interface SearchProps {}
 
 const Search: React.FC<SearchProps> = () => {
+  const router = useRouter()
+  const pathname = usePathname()
   const { setParams, setSearchValue, searchValue } = useAuctionParams()
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -14,6 +17,7 @@ const Search: React.FC<SearchProps> = () => {
   }
 
   const search = () => {
+    if (pathname !== '/') router.push('/')
     setParams({ searchTerm: searchValue })
   }
 

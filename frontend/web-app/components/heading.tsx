@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils'
 
 interface HeadingProps {
   title: string
-  subtitle: string
+  subtitle?: string
   center?: boolean
 }
 

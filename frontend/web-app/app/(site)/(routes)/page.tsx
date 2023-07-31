@@ -14,8 +14,16 @@ export const revalidate = 0
 
 export default function HomePage() {
   const [data, setData] = useState<PagedResult<Auction>>()
-  const { pageNumber, pageSize, searchTerm, setParams, orderBy, filterBy } =
-    useAuctionParams()
+  const {
+    pageNumber,
+    pageSize,
+    searchTerm,
+    setParams,
+    orderBy,
+    filterBy,
+    winner,
+    seller,
+  } = useAuctionParams()
 
   const url = qs.stringifyUrl({
     url: '',
@@ -25,6 +33,8 @@ export default function HomePage() {
       searchTerm,
       orderBy,
       filterBy,
+      seller,
+      winner,
     },
   })
 

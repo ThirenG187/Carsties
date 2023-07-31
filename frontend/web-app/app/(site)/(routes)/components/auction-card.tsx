@@ -1,6 +1,7 @@
 import CountdownTimer from './countdown-timer'
 import CardImage from './card-image'
 import { Auction } from '@/types'
+import Link from 'next/link'
 
 type AuctionCardProps = {
   auction: Auction
@@ -8,7 +9,7 @@ type AuctionCardProps = {
 
 const AuctionCard: React.FC<AuctionCardProps> = ({ auction }) => {
   return (
-    <a href="#">
+    <Link href={`/auctions/details/${auction.id}`}>
       <div className="w-full overflow-hidden bg-gray-200 rounded-lg aspect-w-16 aspect-h-10">
         <div className="group">
           <CardImage imageUrl={auction.imageUrl} />
@@ -23,7 +24,7 @@ const AuctionCard: React.FC<AuctionCardProps> = ({ auction }) => {
         </h3>
         <p className="text-sm font-semibold">{auction.year}</p>
       </div>
-    </a>
+    </Link>
   )
 }
 

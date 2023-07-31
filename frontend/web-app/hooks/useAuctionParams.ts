@@ -8,6 +8,8 @@ interface ParamsStore {
   searchValue: string
   orderBy: string
   filterBy: string
+  seller?: string
+  winner?: string
 }
 
 type Actions = {
@@ -24,6 +26,8 @@ const initialState: ParamsStore = {
   searchValue: '',
   orderBy: 'make',
   filterBy: 'live',
+  seller: undefined,
+  winner: undefined,
 }
 
 const useAuctionParams = create<ParamsStore & Actions>((set) => ({

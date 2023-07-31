@@ -1,3 +1,5 @@
+'use server'
+
 import { getSession } from '@/actions/auth/getSession'
 
 export const getCurrentUser = async () => {
