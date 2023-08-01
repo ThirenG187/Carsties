@@ -1,5 +1,6 @@
 using AuctionService.Consumers;
 using AuctionService.Data;
+using AuctionService.Services;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +54,8 @@ var builder = WebApplication.CreateBuilder(args);
 			options.TokenValidationParameters.ValidateAudience = false;
 			options.TokenValidationParameters.NameClaimType = "username";
 		});
+
+	builder.Services.AddGrpc();
 }
 
 var app = builder.Build();
@@ -66,6 +69,7 @@ var app = builder.Build();
 	app.UseAuthorization();
 
 	app.MapControllers();
+	app.MapGrpcService<GrpcAuctionService>();
 
 
 	try
