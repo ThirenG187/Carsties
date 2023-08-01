@@ -5,8 +5,6 @@ var builder = WebApplication.CreateBuilder(args);
 	builder.Services.AddReverseProxy()
 		.LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
-	builder.Services.AddCors();
-
 	builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 	.AddJwtBearer(options =>
 	{
@@ -15,12 +13,21 @@ var builder = WebApplication.CreateBuilder(args);
 		options.TokenValidationParameters.ValidateAudience = false;
 		options.TokenValidationParameters.NameClaimType = "username";
 	});
+
+	builder.Services.AddCors(policy => policy.AddPolicy("customPolicy", b =>
+	{
+		b.AllowAnyHeader()
+		.AllowAnyMethod()
+		.AllowCredentials()
+		.WithOrigins(builder.Configuration["ClientApp"]);
+	}));
 }
 
 var app = builder.Build();
 {
+	app.UseCors("customPolicy");
+
 	app.MapReverseProxy();
-	app.UseCors(pol => pol.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 	app.UseAuthentication();
 	app.UseAuthorization();
