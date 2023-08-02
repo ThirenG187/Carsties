@@ -9,11 +9,14 @@ import Filters from './components/filters'
 import useAuctionParams from '@/hooks/useAuctionParams'
 import qs from 'query-string'
 import EmptyFilter from '@/components/empty-filter'
+import { useAuctionStore } from '@/hooks/useAuctionStore'
+import { shallow } from 'zustand/shallow'
 
 export const revalidate = 0
 
 export default function HomePage() {
-  const [data, setData] = useState<PagedResult<Auction>>()
+  const [loading, setLoading] = useState(true)
+
   const {
     pageNumber,
     pageSize,
@@ -24,6 +27,17 @@ export default function HomePage() {
     winner,
     seller,
   } = useAuctionParams()
+
+  const data = useAuctionStore(
+    (state) => ({
+      auctions: state.auctions,
+      totalCount: state.totalCount,
+      pageCount: state.pageCount,
+    }),
+    shallow
+  )
+
+  const setData = useAuctionStore((state) => state.setData)
 
   const url = qs.stringifyUrl({
     url: '',
@@ -43,10 +57,11 @@ export default function HomePage() {
   useEffect(() => {
     getAuctionsResponse(url).then((response) => {
       setData(response)
+      setLoading(false)
     })
-  }, [url])
+  }, [setData, url])
 
-  if (!data) return <h3>Loading...</h3>
+  if (loading) return <h3>Loading...</h3>
 
   return (
     <>
@@ -56,8 +71,8 @@ export default function HomePage() {
       ) : (
         <>
           <div className="grid grid-cols-4 gap-6">
-            {data.results &&
-              data.results.map((auction: any) => (
+            {data.auctions &&
+              data.auctions.map((auction: any) => (
                 <AuctionCard key={auction.id} auction={auction} />
               ))}
           </div>

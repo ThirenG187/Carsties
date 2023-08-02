@@ -2,6 +2,7 @@ import CountdownTimer from './countdown-timer'
 import CardImage from './card-image'
 import { Auction } from '@/types'
 import Link from 'next/link'
+import CurrentBid from './current-bid'
 
 type AuctionCardProps = {
   auction: Auction
@@ -15,6 +16,12 @@ const AuctionCard: React.FC<AuctionCardProps> = ({ auction }) => {
           <CardImage imageUrl={auction.imageUrl} />
           <div className="absolute bottom-2 left-2">
             <CountdownTimer auctionEnd={auction.auctionEnd} />
+          </div>
+          <div className="absolute top-2 right-2">
+            <CurrentBid
+              reservePrice={auction.reservePrice}
+              amount={auction.currentHighBid}
+            />
           </div>
         </div>
       </div>

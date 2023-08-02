@@ -6,6 +6,9 @@ import DetailsGrid from './details-grid'
 import { getCurrentUser } from '@/actions/auth/getCurrentUser'
 import EditButton from './edit-button'
 import DeleteButton from './delete-button'
+import { getBidsForAuction } from '@/actions/bids/getBidsForAuction'
+import BidItem from './bid-item'
+import BidList from './bid-list'
 
 interface DetailsPageProps {
   params: {
@@ -18,9 +21,10 @@ export const revalidate = 0
 const DetailsPage: React.FC<DetailsPageProps> = async ({ params }) => {
   const details = await getAuctionDetails(params.id)
   const user = await getCurrentUser()
+  const bids = await getBidsForAuction(params.id)
 
   return (
-    <div>
+    <>
       <div className="flex justify-between">
         <div className="flex items-center gap-3">
           <Heading title={`${details.make} ${details.model}`} />
@@ -41,16 +45,13 @@ const DetailsPage: React.FC<DetailsPageProps> = async ({ params }) => {
         <div className="w-full bg-gray-200 aspect-h-10 aspect-w-16 rounded-lg overflow-hidden">
           <CardImage imageUrl={details.imageUrl} />
         </div>
-
-        <div className="border-2 rounded-lg p-2 bg-gray-100">
-          <Heading title="Bids" />
-        </div>
+        <BidList user={user} auction={details} />
       </div>
 
       <div className="mt-3 grid grid-cols-1 rounded-lg">
         <DetailsGrid auction={details} />
       </div>
-    </div>
+    </>
   )
 }
 
