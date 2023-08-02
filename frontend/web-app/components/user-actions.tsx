@@ -7,6 +7,13 @@ import { User } from 'next-auth'
 import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import {
+  AiOutlineUser,
+  AiOutlineTrophy,
+  AiOutlineCar,
+  AiOutlineLogout,
+} from 'react-icons/ai'
+import { HiCog } from 'react-icons/hi2'
 
 interface UserActionsProps {
   user: User
@@ -29,21 +36,21 @@ const UserActions: React.FC<UserActionsProps> = ({ user }) => {
 
   return (
     <Dropdown inline label={`Welcome ${user.name}`}>
-      <Dropdown.Item icon={UserIcon} onClick={setSeller}>
+      <Dropdown.Item icon={AiOutlineUser} onClick={setSeller}>
         My Auctions
       </Dropdown.Item>
-      <Dropdown.Item icon={Trophy} onClick={setWinner}>
+      <Dropdown.Item icon={AiOutlineTrophy} onClick={setWinner}>
         Auctions Won
       </Dropdown.Item>
-      <Dropdown.Item icon={Car}>
+      <Dropdown.Item icon={AiOutlineCar}>
         <Link href="/auctions/create">Sell my car</Link>
       </Dropdown.Item>
-      <Dropdown.Item icon={Cog}>
+      <Dropdown.Item icon={HiCog}>
         <Link href="/session">Session (dev only)</Link>
       </Dropdown.Item>
       <Dropdown.Divider />
       <Dropdown.Item
-        icon={LogOut}
+        icon={AiOutlineLogout}
         onClick={() => signOut({ callbackUrl: '/' })}
       >
         Sign out

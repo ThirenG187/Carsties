@@ -25,16 +25,20 @@ const SignalRProvider: React.FC<SignalRProviderProps> = ({
 
   const { setCurrentPrice } = useAuctionStore()
   const { addBid } = useBidStore()
+  const apiUrl =
+    process.env.NODE_ENV === 'production'
+      ? 'https://api.carsties.com/notifications'
+      : process.env.NEXT_PUBLIC_NOTIFY_URL!
 
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
-      .withUrl('http://localhost:6001/notifications')
+      .withUrl(apiUrl)
       .withAutomaticReconnect()
       .build()
 
     setConnection(newConnection)
     setIsMounted(true)
-  }, [])
+  }, [apiUrl])
 
   useEffect(() => {
     if (connection) {

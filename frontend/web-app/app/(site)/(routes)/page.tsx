@@ -10,7 +10,6 @@ import useAuctionParams from '@/hooks/useAuctionParams'
 import qs from 'query-string'
 import EmptyFilter from '@/components/empty-filter'
 import { useAuctionStore } from '@/hooks/useAuctionStore'
-import { shallow } from 'zustand/shallow'
 
 export const revalidate = 0
 
@@ -28,16 +27,15 @@ export default function HomePage() {
     seller,
   } = useAuctionParams()
 
-  const data = useAuctionStore(
-    (state) => ({
-      auctions: state.auctions,
-      totalCount: state.totalCount,
-      pageCount: state.pageCount,
-    }),
-    shallow
-  )
+  const { auctions, totalCount, pageCount, setData } = useAuctionStore()
 
-  const setData = useAuctionStore((state) => state.setData)
+  // const data = useAuctionStore((state) => ({
+  //   auctions: state.auctions,
+  //   totalCount: state.totalCount,
+  //   pageCount: state.pageCount,
+  // }))
+
+  // const setData = useAuctionStore((state) => state.setData)
 
   const url = qs.stringifyUrl({
     url: '',
@@ -66,20 +64,20 @@ export default function HomePage() {
   return (
     <>
       <Filters />
-      {data.totalCount === 0 ? (
+      {totalCount === 0 ? (
         <EmptyFilter showReset />
       ) : (
         <>
           <div className="grid grid-cols-4 gap-6">
-            {data.auctions &&
-              data.auctions.map((auction: any) => (
+            {auctions &&
+              auctions.map((auction: any) => (
                 <AuctionCard key={auction.id} auction={auction} />
               ))}
           </div>
           <div className="flex justify-center">
             <Pagination
               currentPage={pageNumber}
-              pageCount={data.pageCount}
+              pageCount={pageCount}
               pageChanged={setPageNumber}
             />
           </div>

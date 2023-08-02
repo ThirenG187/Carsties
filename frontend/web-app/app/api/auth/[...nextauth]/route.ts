@@ -11,7 +11,7 @@ export const authOptions: AuthOptions = {
       id: 'id-server',
       clientId: 'auctionsNextApp',
       clientSecret: 'secret',
-      issuer: 'http://localhost:5000',
+      issuer: process.env.IDS_URL,
       authorization: {
         params: {
           scope: 'openid profile auctionApp',
